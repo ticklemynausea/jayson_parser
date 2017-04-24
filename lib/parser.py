@@ -27,9 +27,6 @@ class Parser:
         tokenizer = Tokenizer(self.input)
         self.tokens = tokenizer.tokenize()
 
-    def __repr__(self):
-        return self.tokens
-
     def __peek(self, pos = 0):
         return self.tokens[pos].tokenType
 

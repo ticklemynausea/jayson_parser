@@ -3,19 +3,6 @@
 import unittest
 from lib.tokenizer import Tokenizer, Token, TokenType
 
-sample = r"""
-{
-    "yes": true,
-    "no": false,
-    "nothing": null,
-    "number": 123,
-    "negative_number": -123,
-    "strings": "A \"string\".\nFor real.",
-    "object": {"omg": "things"},
-    "list": [1, "a", {}, []]
-}
-"""
-
 class TestTokenizer(unittest.TestCase):
 
     def test_number(self):
