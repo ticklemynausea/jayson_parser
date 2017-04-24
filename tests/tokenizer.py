@@ -3,37 +3,18 @@
 import unittest
 from lib.tokenizer import Tokenizer, Token, TokenType
 
-# @TODO uh i'll deal with that nasty "\"" thing later
-# sample = """
-# {
-#     "yes": true,
-#     "no": false,
-#     "nothing": null,
-#     "number": 123,
-#     "negative_number": -123,
-#     "strings": "A \"string\".\nFor real.",
-#     "object": {"omg": "things"},
-#     "list": [1, "a", {}, []]
-# }
-# """
-
-sample = """
+sample = r"""
 {
     "yes": true,
     "no": false,
     "nothing": null,
     "number": 123,
     "negative_number": -123,
-    "strings": "A' string'.\nFor real.",
+    "strings": "A \"string\".\nFor real.",
     "object": {"omg": "things"},
     "list": [1, "a", {}, []]
 }
 """
-#tokenizer = Tokenizer(sample)
-#x = tokenizer.tokenize()
-
-#print x
-
 
 class TestTokenizer(unittest.TestCase):
 
@@ -58,6 +39,18 @@ class TestTokenizer(unittest.TestCase):
         self.assertEqual(tokens[0], Token(TokenType.STRING, '"xyzzy"'))
         self.assertEqual(tokens[1], Token(TokenType.STRING, '"foobar"'))
 
+    def test_string_with_quotes(self):
+        sample = r"""
+            "xyzzy is a \"word\"" "foobar is a \"word\" too"
+        """
+        tokenizer = Tokenizer(sample)
+        tokens = tokenizer.tokenize()
+
+        self.assertEqual(len(tokens), 2)
+        self.assertEqual(tokens[0], Token(TokenType.STRING, r'"xyzzy is a \"word\""'))
+        self.assertEqual(tokens[1], Token(TokenType.STRING, r'"foobar is a \"word\" too"'))
+
+
     def test_literal(self):
         sample = """
             true false null
@@ -71,14 +64,14 @@ class TestTokenizer(unittest.TestCase):
         self.assertEqual(tokens[2], Token(TokenType.LITERAL, 'null'))
 
     def test_mixed(self):
-        sample = """
+        sample = r"""
             {
                 "yes": true,
                 "no": false,
                 "nothing": null,
                 "number": 123,
                 "negative_number": -123,
-                "strings": "A' string'.\nFor real.",
+                "strings": "A \"string\".\nFor real.",
                 "object": {"omg": "things"},
                 "list": [1, "a", {}, []]
             }
@@ -111,7 +104,7 @@ class TestTokenizer(unittest.TestCase):
             Token(TokenType.COMMA),
             Token(TokenType.STRING, '"strings"'),
             Token(TokenType.COLON),
-            Token(TokenType.STRING, '"A\' string\'.\nFor real."'),
+            Token(TokenType.STRING, r'"A \"string\".\nFor real."'),
             Token(TokenType.COMMA),
             Token(TokenType.STRING, '"object"'),
             Token(TokenType.COLON),

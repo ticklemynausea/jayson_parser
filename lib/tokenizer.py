@@ -19,7 +19,7 @@ class Token:
         self.content = content
 
     def __repr__(self):
-        return "<{0} {1}>".format(self.tokenType, self.content)
+        return "<{0} {1}>".format(self.tokenType, self.content) if self.content else "<{0}>".format(self.tokenType)
 
     def __eq__(self, other):
         return self.tokenType == other.tokenType and self.content == other.content
@@ -31,8 +31,8 @@ class Tokenizer(object):
         self.cursor = 0
         self.tokens = []
 
-    # returns and consumes the next token in the string
-    def next(self):
+    # returns the next token in the string
+    def __next(self):
 
         # are we done?
         if not self.cursor < len(self.string):
@@ -100,7 +100,8 @@ class Tokenizer(object):
             return token
 
         # try strings
-        match = re.match(r'"[^"]*"', self.string[self.cursor:])
+        # cheats: http://stackoverflow.com/questions/249791/regex-for-quoted-string-with-escaping-quotes
+        match = re.match(r'"(?:[^"\\]|\\.)*"', self.string[self.cursor:])
         if match:
             matched_text = match.group(0)
             token = Token(TokenType.STRING, matched_text)
@@ -113,11 +114,11 @@ class Tokenizer(object):
     def tokenize(self):
         #print "Tokenizing..."
         while True:
-            token = self.next()
+            token = self.__next()
             if token is None:
                 break
 
-            #print "next() returns", token
+            #print "__next() returns", token
             self.tokens.append(token)
 
         return self.tokens
