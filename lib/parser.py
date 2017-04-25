@@ -36,7 +36,7 @@ class Parser:
     def __next(self, tokenType = None):
         token = self.tokens.pop(0)
         if tokenType is not None:
-            assert(token.tokenType == tokenType)
+            assert token.tokenType == tokenType
         return token
 
     # skips the next token if it is of the given type
@@ -66,7 +66,7 @@ class Parser:
     # parse `STRING` terminator
     def __parse_string(self):
         token = self.__next()
-        assert(token.tokenType == TokenType.STRING)
+        assert token.tokenType == TokenType.STRING
         return token.content[1:-1].decode('string_escape')
 
     # parse `NUMBER` terminator
@@ -147,4 +147,7 @@ class Parser:
 
     # evaluate the python equivalent of the given jayson string
     def parse(self):
-        return self.__parse_value()
+        value = self.__parse_value()
+        remaining = len(self.tokens)
+        assert remaining == 0, "Expected all tokens to be consumed, {0} remain".format(remaining)
+        return value
