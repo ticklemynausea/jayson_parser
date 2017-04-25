@@ -95,4 +95,6 @@ class TestParser(unittest.TestCase):
         parser = Parser(sample)
         result = parser.parse()
 
-        self.assertDictEqual(result, { 'yes': True, 'no': False, 'nothing': None, 'number': 123, 'negative_number': -123, 'strings': r'A \"string\".\nFor real.', 'object': { 'omg': 'things' }, 'list': [1, 'a', {}, []] })
+        self.assertDictEqual(result, { 'yes': True, 'no': False, 'nothing': None, 'number': 123, \
+            'negative_number': -123, 'strings': 'A \"string\".\nFor real.', 'object': \
+            { 'omg': 'things' }, 'list': [1, 'a', {}, []] })

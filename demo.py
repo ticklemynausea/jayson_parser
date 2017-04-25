@@ -21,11 +21,12 @@ data = r"""
     }
 }
 """
+
+# use the parser
 parser = Parser(data)
 result = parser.parse()
 
-# ~~~~
-
+# use the data evaluated from the string above to print an ugly high scores table
 bonuses = result['bonuses']
 players = []
 for player in result['players']:
