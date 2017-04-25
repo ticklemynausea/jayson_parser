@@ -27,7 +27,7 @@ class Token:
 class Tokenizer(object):
 
     def __init__(self, string):
-        self.string = string.strip()
+        self.string = string
         self.cursor = 0
         self.tokens = []
 
@@ -59,13 +59,13 @@ class Tokenizer(object):
     # returns the next token in the string
     def __next(self):
 
-        # are we done?
-        if not self.cursor < len(self.string):
-            return None
-
         # skip whitespace characters
         while self.__look().isspace():
             self.__advance()
+
+        # are we done?
+        if self.cursor >= len(self.string):
+            return None
 
         # tokenize structural characters
         if self.__look() == '{':
